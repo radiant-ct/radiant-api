@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-app = FastAPI(title="FastAPI + PostgreSQL")
+app = FastAPI(title="Radiant API")
 
 @app.get("/")
 def read_root():
