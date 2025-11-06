@@ -21,3 +21,6 @@ ENV/
 # Docker
 *.log
 __docker__/
+
+# Databases
+*.db
