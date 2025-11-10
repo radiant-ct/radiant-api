@@ -43,7 +43,8 @@ name = "cz_conventional_commits"
 version = "1.0.0"
 tag_format = "v$version"
 
+
 [tool.semantic_release]
-version_variable = "src/radiant_api/__init__.py:__version__"
-update_changelog = true
+version_variable = "pyproject.toml:tool.poetry.version"
 upload_to_pypi = false
+commit_message = "chore: Bump version to {version} [skip ci]"
