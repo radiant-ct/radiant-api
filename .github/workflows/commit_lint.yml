@@ -1,0 +1,37 @@
+name: Conventional Commits Check
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  check-commits:
+    runs-on: ubuntu-latest
+    steps:
+      # 🧩 Checkout repo
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # required to see full commit history
+
+      # 🧰 Install Poetry (official installer action)
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+
+      # 🐍 Set up Python that matches your pyproject.toml
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # 📦 Install dependencies (both main + dev)
+      - name: Install dependencies
+        run: |
+          poetry install --with dev
+
+      # ✅ Check all commits between main and HEAD
+      - name: Check Conventional Commits
+        run: |
+          poetry run cz check --rev-range origin/main..HEAD

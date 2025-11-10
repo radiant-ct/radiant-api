@@ -4,7 +4,7 @@ version = "0.1.0"
 description = ""
 authors = [{ name = "Pepe Coral", email = "coritochico@gmail.com" }]
 readme = "README.md"
-requires-python = ">=3.12"
+requires-python = ">=3.12,<4.0"
 dependencies = [
   "fastapi (>=0.121.0,<0.122.0)",
   "uvicorn[standard] (>=0.38.0,<0.39.0)",
@@ -27,9 +27,16 @@ dev = [
   "pytest-asyncio (>=1.2.0,<2.0.0)",
   "httpx (>=0.28.1,<0.29.0)",
   "poethepoet (>=0.37.0,<0.38.0)",
+  "pre-commit (>=4.4.0,<5.0.0)",
+  "commitizen (>=4.10.0,<5.0.0)",
 ]
 
 
 [tool.poe.tasks]
 dev = "uvicorn src.radiant_api.main:app --reload"
 test = "pytest tests"
+
+[tool.commitizen]
+name = "cz_conventional_commits"
+version = "1.0.0"
+tag_format = "v$version"
