@@ -9,6 +9,9 @@ class ImageRecordRepository:
     def get_all(self) -> list[ImageRecord]:
         return self.db.query(ImageRecord).all()
 
+    def get_by_id(self, image_id: int) -> ImageRecord | None:
+        return self.db.query(ImageRecord).filter(ImageRecord.id == image_id).first()
+
     def create(self, image_in: ImageRecordCreate) -> ImageRecord:
         image_record:ImageRecord = ImageRecord(**image_in.model_dump())
         self.db.add(image_record)
