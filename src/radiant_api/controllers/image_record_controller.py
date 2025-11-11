@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from radiant_api.core.database import get_db
 from radiant_api.repositories.image_record_repository import ImageRecordRepository
@@ -21,3 +21,11 @@ def create_image(image_in: ImageRecordCreate, db: Session = Depends(get_db)) -> 
     created_image: ImageRecord = service.create_image(image_in)
     image_schema:ImageRecordSchema = ImageRecordSchema(create_image)
     return image_schema
+
+@router.get("/{image_id}", response_model=ImageRecordSchema)
+def get_image_by_id(image_id: int, db: Session = Depends(get_db)) -> ImageRecordSchema:
+    service: ImageRecordService = ImageRecordService(ImageRecordRepository(db))
+    image: ImageRecord | None = service.get_image_by_id(image_id)
+    if not image:
+        raise HTTPException(status_code=404, detail=f"Image with id {image_id} not found")
+    return ImageRecordSchema(image)

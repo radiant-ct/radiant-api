@@ -10,3 +10,6 @@ class ImageRecordService:
 
     def create_image(self, user_in: ImageRecordCreate) -> ImageRecord:
         return self.repo.create(user_in)
+
+    def get_image_by_id(self, id: int):
+        return self.repo.get_by_id(id)
