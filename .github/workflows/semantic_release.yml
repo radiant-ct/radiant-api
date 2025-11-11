@@ -43,4 +43,6 @@ jobs:
         run: poetry install --with dev
 
       - name: Bump version with semantic-release
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
         run: poetry run semantic-release version
