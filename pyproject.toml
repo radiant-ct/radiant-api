@@ -43,6 +43,7 @@ name = "cz_conventional_commits"
 version = "1.0.0"
 tag_format = "v$version"
 
+
 [tool.semantic_release]
 version_variable = "pyproject.toml:tool.poetry.version"
 upload_to_pypi = false
