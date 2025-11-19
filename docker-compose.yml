@@ -1,0 +1,64 @@
+version: '3.9'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:16-alpine
+    container_name: radiant-postgres
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - radiant-network
+
+  # FastAPI Application
+  radiant-api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: radiant-api
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      PYTHONUNBUFFERED: ${PYTHONUNBUFFERED}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - ./src:/app/src:ro
+      - files_volume:/app/files
+    networks:
+      - radiant-network
+    restart: unless-stopped
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: radiant-nginx
+    ports:
+      - "${NGINX_PORT}:80"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - files_volume:/app/files:ro
+    depends_on:
+      - radiant-api
+    networks:
+      - radiant-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  files_volume:
+
+networks:
+  radiant-network:
+    driver: bridge
