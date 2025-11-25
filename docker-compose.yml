@@ -1,7 +1,4 @@
-version: '3.9'
-
-services:
-  # PostgreSQL Database
+fiservices:
   postgres:
     image: postgres:16-alpine
     container_name: radiant-postgres
@@ -21,7 +18,6 @@ services:
     networks:
       - radiant-network
 
-  # FastAPI Application
   radiant-api:
     build:
       context: .
@@ -29,18 +25,49 @@ services:
     container_name: radiant-api
     environment:
       DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: "redis://redis:6379/0"
       PYTHONUNBUFFERED: ${PYTHONUNBUFFERED}
     depends_on:
       postgres:
         condition: service_healthy
+      redis:
+        condition: service_started
     volumes:
       - ./src:/app/src:ro
+      - tmp_volume:/app/tmp
+    networks:
+      - radiant-network
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: radiant-worker
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      REDIS_URL: "redis://redis:6379/0"
+      PYTHONUNBUFFERED: ${PYTHONUNBUFFERED}
+    depends_on:
+      - postgres
+      - redis
+    volumes:
+      - ./src:/app/src
       - files_volume:/app/files
+      - tmp_volume:/app/tmp
+    command: ["rq", "worker", "datasets"]
     networks:
       - radiant-network
     restart: unless-stopped
 
-  # Nginx Reverse Proxy
+  redis:
+    image: redis:7-alpine
+    container_name: radiant-redis
+    networks:
+      - radiant-network
+
   nginx:
     image: nginx:alpine
     container_name: radiant-nginx
@@ -58,6 +85,7 @@ services:
 volumes:
   postgres_data:
   files_volume:
+  tmp_volume:
 
 networks:
   radiant-network:
