@@ -2,7 +2,7 @@ from pydantic_settings import BaseSettings
 
 class Settings(BaseSettings):
     DATABASE_URL: str = "sqlite:///./radiant.db"
-    # For prod: "postgresql+psycopg2://user:password@host:port/dbname"
+    TMP_VOLUME_PATH: str = "/app/tmp"
 
     class Config:
         env_file = ".env"
