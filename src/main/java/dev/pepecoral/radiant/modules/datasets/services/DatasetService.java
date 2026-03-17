@@ -12,13 +12,14 @@ import dev.pepecoral.radiant.modules.datasets.entities.Dataset;
 import dev.pepecoral.radiant.modules.datasets.repositories.DatasetRepository;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
 
 @Service
 @Validated
+@RequiredArgsConstructor
 public class DatasetService {
 
-    @Autowired
-    DatasetRepository datasetRepository;
+    private final DatasetRepository datasetRepository;
 
     public Dataset create(@Valid Dataset dataset) {
 
