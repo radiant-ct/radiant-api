@@ -97,4 +97,17 @@ public class DatasetServiceTest {
         assertThrows(ConstraintViolationException.class, () -> datasetService.findById(null));
     }
 
+    @Test
+    public void shouldFindAll() {
+
+        for (int i = 0; i < 5; i++) {
+
+            DatasetTestBuilder.builder().build().persist(testPersistenceContext);
+        }
+
+        List<Dataset> datasets = datasetService.findAll();
+
+        assertEquals(5, datasets.size());
+    }
+
 }
