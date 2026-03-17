@@ -92,4 +92,9 @@ public class DatasetServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> datasetService.findById(UUID.randomUUID()));
     }
 
+    @Test
+    public void shouldThrow_whenFindByIdWithNullId() {
+        assertThrows(ConstraintViolationException.class, () -> datasetService.findById(null));
+    }
+
 }
