@@ -33,4 +33,8 @@ public class DatasetService {
                 .orElseThrow(() -> new ResourceNotFoundException("There is no dataset with id: " + uuid));
     }
 
+    public List<Dataset> findAll() {
+        return datasetRepository.findAll();
+    }
+
 }
