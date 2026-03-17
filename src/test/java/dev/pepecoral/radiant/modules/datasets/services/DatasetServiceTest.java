@@ -110,4 +110,12 @@ public class DatasetServiceTest {
         assertEquals(5, datasets.size());
     }
 
+    @Test
+    public void shouldFindAll_whenNoDataset() {
+
+        List<Dataset> datasets = datasetService.findAll();
+
+        assertEquals(0, datasets.size());
+    }
+
 }
