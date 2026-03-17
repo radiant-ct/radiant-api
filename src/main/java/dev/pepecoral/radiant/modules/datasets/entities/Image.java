@@ -19,7 +19,7 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@Table(name = "datasets")
+@Table(name = "images")
 @EqualsAndHashCode(of = { "id" })
 public class Image {
 
