@@ -33,4 +33,34 @@ public class DatasetSerciveTest {
         assertThrows(ConstraintViolationException.class, () -> datasetService.create(dataset));
     }
 
+    @Test
+    public void shouldThrow_whenCreateDatasetNameEmpty() {
+        Dataset dataset = DatasetTestBuilder.builder().name("").build().entity();
+        assertThrows(ConstraintViolationException.class, () -> datasetService.create(dataset));
+    }
+
+    @Test
+    public void shouldThrow_whenCreateDatasetDescriptionNull() {
+        Dataset dataset = DatasetTestBuilder.builder().description(null).build().entity();
+        assertThrows(ConstraintViolationException.class, () -> datasetService.create(dataset));
+    }
+
+    @Test
+    public void shouldThrow_whenCreateDatasetDescriptionEmpty() {
+        Dataset dataset = DatasetTestBuilder.builder().description("").build().entity();
+        assertThrows(ConstraintViolationException.class, () -> datasetService.create(dataset));
+    }
+
+    @Test
+    public void shouldThrow_whenCreateDatasetCreditsNull() {
+        Dataset dataset = DatasetTestBuilder.builder().credits(null).build().entity();
+        assertThrows(ConstraintViolationException.class, () -> datasetService.create(dataset));
+    }
+
+    @Test
+    public void shouldThrow_whenCreateDatasetCreditsEmpty() {
+        Dataset dataset = DatasetTestBuilder.builder().credits("").build().entity();
+        assertThrows(ConstraintViolationException.class, () -> datasetService.create(dataset));
+    }
+
 }
