@@ -11,6 +11,7 @@ import dev.pepecoral.radiant.modules.common.exceptions.ResourceNotFoundException
 import dev.pepecoral.radiant.modules.datasets.entities.Dataset;
 import dev.pepecoral.radiant.modules.datasets.repositories.DatasetRepository;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 
 @Service
 @Validated
@@ -27,7 +28,7 @@ public class DatasetService {
         return datasetRepository.save(dataset);
     }
 
-    public Dataset findById(UUID uuid) {
+    public Dataset findById(@NotNull UUID uuid) {
         return datasetRepository.findById(uuid)
                 .orElseThrow(() -> new ResourceNotFoundException("There is no dataset with id: " + uuid));
     }
