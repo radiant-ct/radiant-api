@@ -16,6 +16,10 @@ public class DatasetService {
     DatasetRepository datasetRepository;
 
     public Dataset create(@Valid Dataset dataset) {
+
+        if (dataset.getId() != null) {
+            throw new IllegalArgumentException("Id must be null when creating a new Dataset");
+        }
         return datasetRepository.save(dataset);
     }
 }
