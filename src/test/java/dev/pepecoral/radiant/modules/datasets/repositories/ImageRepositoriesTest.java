@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.data.jpa.test.autoconfigure.DataJpaTest;
 
-import dev.pepecoral.radiant.modules.common.builders.TestPersistenceContext;
 import dev.pepecoral.radiant.modules.datasets.builders.ImageTestBuilder;
 import dev.pepecoral.radiant.modules.datasets.entities.Image;
 
@@ -15,9 +14,6 @@ public class ImageRepositoriesTest {
 
     @Autowired
     ImageRepository imageRepository;
-
-    @Autowired
-    TestPersistenceContext testPersistenceContext;
 
     @Test
     void imageRequiresDataset() {
