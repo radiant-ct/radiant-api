@@ -43,20 +43,20 @@ public class ImageServiceTest {
     }
 
     @Test
-    public void shouldThrow_whenDatasetNotPersisted() {
+    public void shouldThrow_whenCreatingWithDatasetNotPersisted() {
         Dataset dataset = DatasetTestBuilder.builder().build().entity();
         Image image = ImageTestBuilder.builder().dataset(null).build().entity();
         assertThrows(ConstraintViolationException.class, () -> imageService.create(image, dataset));
     }
 
     @Test
-    public void shouldThrow_whenDatasetNull() {
+    public void shouldThrow_whenCreatedWithDatasetNull() {
         Image image = ImageTestBuilder.builder().dataset(null).build().entity();
         assertThrows(ConstraintViolationException.class, () -> imageService.create(image, null));
     }
 
     @Test
-    public void shouldThrow_whenDatasetSet() {
+    public void shouldThrow_whenCreatingWithImageDatasetSet() {
         Dataset dataset = DatasetTestBuilder.builder().build().entity();
         Image image = ImageTestBuilder.builder().build().entity();
         assertThrows(DatasetSetInImageCreationException.class, () -> imageService.create(image, dataset));
@@ -72,12 +72,12 @@ public class ImageServiceTest {
     }
 
     @Test
-    public void shouldThrow_whenIdDoesntExist() {
+    public void shouldThrow_whenFindingByNonexistingId() {
         assertThrows(ResourceNotFoundException.class, () -> imageService.findById(UUID.randomUUID()));
     }
 
     @Test
-    public void shouldThrow_whenIdisNull() {
+    public void shouldThrow_whenFindingByNullId() {
         assertThrows(ConstraintViolationException.class, () -> imageService.findById(null));
     }
 
