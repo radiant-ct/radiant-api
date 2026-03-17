@@ -87,4 +87,9 @@ public class DatasetServiceTest {
         assertEquals(dataset.getDescription(), gotDataset.getDescription());
     }
 
+    @Test
+    public void shouldThrow_whenFindByIdWithNonExistingId() {
+        assertThrows(ResourceNotFoundException.class, () -> datasetService.findById(UUID.randomUUID()));
+    }
+
 }
