@@ -8,7 +8,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import dev.pepecoral.radiant.modules.datasets.builders.DatasetTestBuilder;
 import dev.pepecoral.radiant.modules.datasets.entities.Dataset;
-import dev.pepecoral.radiant.modules.datasets.entities.Image;
 
 @SpringBootTest
 public class DatasetSerciveTest {
