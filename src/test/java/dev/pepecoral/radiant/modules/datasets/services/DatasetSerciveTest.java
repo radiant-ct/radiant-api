@@ -3,7 +3,7 @@ package dev.pepecoral.radiant.modules.datasets.services;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.security.InvalidAlgorithmParameterException;
+import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,6 +61,12 @@ public class DatasetSerciveTest {
     public void shouldThrow_whenCreateDatasetCreditsEmpty() {
         Dataset dataset = DatasetTestBuilder.builder().credits("").build().entity();
         assertThrows(ConstraintViolationException.class, () -> datasetService.create(dataset));
+    }
+
+    @Test
+    public void shouldThrow_whenCreateDatasetWithIdNotNull() {
+        Dataset dataset = DatasetTestBuilder.builder().id(UUID.randomUUID()).build().entity();
+        assertThrows(IllegalArgumentException.class, () -> datasetService.create(dataset));
     }
 
 }
