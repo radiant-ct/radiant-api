@@ -32,7 +32,7 @@ public class ImageService {
         return imageRepository.save(image);
     }
 
-    public Image findById(UUID imageId) {
+    public Image findById(@NotNull UUID imageId) {
 
         return imageRepository.findById(imageId).orElseThrow(() -> new ResourceNotFoundException());
     }
