@@ -99,4 +99,20 @@ public class ImageServiceTest {
 
     }
 
+    @Test
+    public void shouldThrow_whenFindByNotPersistedDataset() {
+
+        Dataset dataset = DatasetTestBuilder.builder().build().entity();
+
+        assertThrows(ConstraintViolationException.class, () -> imageService.findByDataset(dataset));
+
+    }
+
+    @Test
+    public void shouldThrow_whenFindByNullDataset() {
+
+        assertThrows(ConstraintViolationException.class, () -> imageService.findByDataset(null));
+
+    }
+
 }
