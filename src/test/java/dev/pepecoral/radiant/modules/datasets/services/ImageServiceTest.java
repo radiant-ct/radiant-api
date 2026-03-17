@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.UUID;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -54,5 +56,14 @@ public class ImageServiceTest {
         Dataset dataset = DatasetTestBuilder.builder().build().entity();
         Image image = ImageTestBuilder.builder().build().entity();
         assertThrows(DatasetSetInImageCreationException.class, () -> imageService.create(image, dataset));
+    }
+
+    @Test
+    public void shouldFindImageById() {
+        UUID imageId = ImageTestBuilder.builder().build().persist(testPersistenceContext).getId();
+        Image image = imageService.findById(imageId);
+        assertNotNull(image);
+        assertEquals(imageId, image.getId());
+
     }
 }
