@@ -1,5 +1,6 @@
 package dev.pepecoral.radiant.modules.datasets.services;
 
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -35,5 +36,9 @@ public class ImageService {
     public Image findById(@NotNull UUID imageId) {
 
         return imageRepository.findById(imageId).orElseThrow(() -> new ResourceNotFoundException());
+    }
+
+    public List<Image> findByDataset(Dataset dataset) {
+        return imageRepository.findAllByDataset(dataset);
     }
 }
