@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import dev.pepecoral.radiant.modules.common.builders.TestPersistenceContext;
+
 import dev.pepecoral.radiant.modules.common.exceptions.ResourceNotFoundException;
 import dev.pepecoral.radiant.modules.datasets.builders.DatasetTestBuilder;
 import dev.pepecoral.radiant.modules.datasets.builders.ImageTestBuilder;
@@ -71,6 +72,11 @@ public class ImageServiceTest {
     @Test
     public void shouldThrow_whenIdDoesntExist() {
         assertThrows(ResourceNotFoundException.class, () -> imageService.findById(UUID.randomUUID()));
+    }
+
+    @Test
+    public void shouldThrow_whenIdisNull() {
+        assertThrows(ConstraintViolationException.class, () -> imageService.findById(null));
     }
 
 }
