@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.junit.jupiter.api.Test;
@@ -77,6 +79,24 @@ public class ImageServiceTest {
     @Test
     public void shouldThrow_whenIdisNull() {
         assertThrows(ConstraintViolationException.class, () -> imageService.findById(null));
+    }
+
+    @Test
+    public void shouldFindImagesByDataset() {
+        Dataset dataset = DatasetTestBuilder.builder().build().persist(testPersistenceContext);
+
+        List<Image> images = new ArrayList<>();
+
+        for (int i = 0; i < 5; i++) {
+
+            Image image = ImageTestBuilder.builder().dataset(dataset).build().persist(testPersistenceContext);
+            images.add(image);
+        }
+
+        List<Image> foundImages = imageService.findByDataset(dataset);
+
+        assertEquals(5, foundImages.size());
+
     }
 
 }
