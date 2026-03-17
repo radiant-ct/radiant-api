@@ -1,6 +1,9 @@
 package dev.pepecoral.radiant.modules.datasets.services;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.security.InvalidAlgorithmParameterException;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import dev.pepecoral.radiant.modules.datasets.builders.DatasetTestBuilder;
 import dev.pepecoral.radiant.modules.datasets.entities.Dataset;
+import jakarta.validation.ConstraintViolationException;
 
 @SpringBootTest
 public class DatasetSerciveTest {
@@ -21,6 +25,12 @@ public class DatasetSerciveTest {
         Dataset createdDataset = datasetService.create(dataset);
         assertNotNull(createdDataset);
         assertNotNull(createdDataset.getId());
+    }
+
+    @Test
+    public void shouldThrow_whenCreateDatasetNameNull() {
+        Dataset dataset = DatasetTestBuilder.builder().name(null).build().entity();
+        assertThrows(ConstraintViolationException.class, () -> datasetService.create(dataset));
     }
 
 }
