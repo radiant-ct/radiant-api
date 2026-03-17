@@ -1,9 +1,13 @@
 package dev.pepecoral.radiant.modules.datasets.services;
 
+import java.util.List;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import dev.pepecoral.radiant.modules.common.exceptions.ResourceNotFoundException;
 import dev.pepecoral.radiant.modules.datasets.entities.Dataset;
 import dev.pepecoral.radiant.modules.datasets.repositories.DatasetRepository;
 import jakarta.validation.Valid;
@@ -22,4 +26,10 @@ public class DatasetService {
         }
         return datasetRepository.save(dataset);
     }
+
+    public Dataset findById(UUID uuid) {
+        return datasetRepository.findById(uuid)
+                .orElseThrow(() -> new ResourceNotFoundException("There is no dataset with id: " + uuid));
+    }
+
 }
