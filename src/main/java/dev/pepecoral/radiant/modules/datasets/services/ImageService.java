@@ -11,6 +11,7 @@ import dev.pepecoral.radiant.modules.datasets.entities.Dataset;
 import dev.pepecoral.radiant.modules.datasets.entities.Image;
 import dev.pepecoral.radiant.modules.datasets.exceptions.DatasetSetInImageCreationException;
 import dev.pepecoral.radiant.modules.datasets.repositories.ImageRepository;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 
@@ -22,7 +23,7 @@ public class ImageService {
     private final ImageRepository imageRepository;
     private final DatasetService datasetService;
 
-    public Image create(Image image, @NotNull Dataset dataset) {
+    public Image create(@Valid Image image, @NotNull Dataset dataset) {
 
         if (image.getDataset() != null) {
             throw new DatasetSetInImageCreationException();
@@ -38,7 +39,10 @@ public class ImageService {
         return imageRepository.findById(imageId).orElseThrow(() -> new ResourceNotFoundException());
     }
 
-    public List<Image> findByDataset(Dataset dataset) {
-        return imageRepository.findAllByDataset(dataset);
+    public List<Image> findByDataset(@NotNull Dataset dataset) {
+
+        Dataset foundDataset = datasetService.findById(dataset.getId());
+
+        return imageRepository.findAllByDataset(foundDataset);
     }
 }
