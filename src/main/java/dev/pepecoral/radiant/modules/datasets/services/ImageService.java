@@ -1,8 +1,11 @@
 package dev.pepecoral.radiant.modules.datasets.services;
 
+import java.util.UUID;
+
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
+import dev.pepecoral.radiant.modules.common.exceptions.ResourceNotFoundException;
 import dev.pepecoral.radiant.modules.datasets.entities.Dataset;
 import dev.pepecoral.radiant.modules.datasets.entities.Image;
 import dev.pepecoral.radiant.modules.datasets.exceptions.DatasetSetInImageCreationException;
@@ -27,5 +30,10 @@ public class ImageService {
         Dataset gotDataset = datasetService.findById(dataset.getId());
         image.setDataset(gotDataset);
         return imageRepository.save(image);
+    }
+
+    public Image findById(UUID imageId) {
+
+        return imageRepository.findById(imageId).orElseThrow(() -> new ResourceNotFoundException());
     }
 }
