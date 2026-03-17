@@ -2,6 +2,7 @@ package dev.pepecoral.radiant.modules.datasets.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import dev.pepecoral.radiant.modules.datasets.builders.DatasetTestBuilder;
 import dev.pepecoral.radiant.modules.datasets.builders.ImageTestBuilder;
 import dev.pepecoral.radiant.modules.datasets.entities.Dataset;
 import dev.pepecoral.radiant.modules.datasets.entities.Image;
+import dev.pepecoral.radiant.modules.datasets.exceptions.DatasetSetInImageCreationException;
+import jakarta.validation.ConstraintViolationException;
 
 @SpringBootTest
 public class ImageServiceTest {
@@ -25,10 +28,31 @@ public class ImageServiceTest {
     @Test
     public void shouldCreateImage() {
         Dataset dataset = DatasetTestBuilder.builder().build().persist(testPersistenceContext);
-        Image image = ImageTestBuilder.builder().build().entity();
+        Image image = ImageTestBuilder.builder().dataset(null).build().entity();
         Image savedImage = imageService.create(image, dataset);
 
         assertNotNull(savedImage);
         assertNotNull(savedImage.getId());
+        assertEquals(savedImage.getDataset(), dataset);
+    }
+
+    @Test
+    public void shouldThrow_whenDatasetNotPersisted() {
+        Dataset dataset = DatasetTestBuilder.builder().build().entity();
+        Image image = ImageTestBuilder.builder().dataset(null).build().entity();
+        assertThrows(ConstraintViolationException.class, () -> imageService.create(image, dataset));
+    }
+
+    @Test
+    public void shouldThrow_whenDatasetNull() {
+        Image image = ImageTestBuilder.builder().dataset(null).build().entity();
+        assertThrows(ConstraintViolationException.class, () -> imageService.create(image, null));
+    }
+
+    @Test
+    public void shouldThrow_whenDatasetSet() {
+        Dataset dataset = DatasetTestBuilder.builder().build().entity();
+        Image image = ImageTestBuilder.builder().build().entity();
+        assertThrows(DatasetSetInImageCreationException.class, () -> imageService.create(image, dataset));
     }
 }
