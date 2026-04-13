@@ -14,6 +14,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.UUID;
+
 @WebMvcTest(DatasetController.class)
 public class DatasetControllerTest {
 
@@ -26,7 +28,7 @@ public class DatasetControllerTest {
     @Test
     public void datasetController_shouldReturnDataset_whenAskedById() throws Exception {
 
-        Dataset createdDataset = DatasetTestBuilder.builder().build().entity();
+        Dataset createdDataset = DatasetTestBuilder.builder().id(UUID.randomUUID()).build().entity();
 
         when(datasetService.findById(createdDataset.getId()))
                 .thenReturn(createdDataset);
@@ -34,6 +36,6 @@ public class DatasetControllerTest {
         mockMvc.perform(get("/datasets/" + createdDataset.getId()))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.id").value(createdDataset.getId()));
+                .andExpect(jsonPath("$.id").value(createdDataset.getId().toString()));
     }
 }
