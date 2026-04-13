@@ -10,7 +10,7 @@ import dev.pepecoral.radiant.modules.datasets.builders.ImageTestBuilder;
 import dev.pepecoral.radiant.modules.datasets.entities.Image;
 
 @DataJpaTest
-public class ImageRepositoriesTest {
+public class ImageRepositoryTest {
 
     @Autowired
     ImageRepository imageRepository;

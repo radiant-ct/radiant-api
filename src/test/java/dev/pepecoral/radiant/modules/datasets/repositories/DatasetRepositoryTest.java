@@ -15,7 +15,7 @@ import dev.pepecoral.radiant.modules.datasets.entities.Dataset;
 import dev.pepecoral.radiant.modules.datasets.entities.Image;
 
 @DataJpaTest
-public class DatasetRepositoriesTest {
+public class DatasetRepositoryTest {
 
     @Autowired
     private DatasetRepository datasetRepository;
@@ -46,6 +46,5 @@ public class DatasetRepositoriesTest {
         List<Image> imagesAfter = imageRepository.findAll();
         assertTrue(imagesAfter.isEmpty(), "All images should be deleted with the dataset");
     }
-
 
 }
