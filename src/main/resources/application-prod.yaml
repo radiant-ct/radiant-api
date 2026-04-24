@@ -1,0 +1,14 @@
+spring:
+  config:
+    activate:
+      on-profile: prod
+
+  datasource:
+    url: jdbc:postgresql://db:5432/radiant-db
+    username: myuser
+    password: mypassword
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false

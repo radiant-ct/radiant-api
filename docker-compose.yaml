@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:18
+    container_name: postgres18-radiant-db
+    environment:
+      POSTGRES_DB: radiant-db
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql
+    networks:
+      - backend
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U myuser"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    restart: always
+
+  app:
+    build: .
+    container_name: radiant-api
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+    networks:
+      - backend
+    restart: always
+
+volumes:
+  postgres_data:
+
+networks:
+  backend:
