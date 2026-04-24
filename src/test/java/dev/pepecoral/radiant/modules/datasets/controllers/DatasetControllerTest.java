@@ -12,6 +12,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import dev.pepecoral.radiant.modules.datasets.builders.DatasetTestBuilder;
 import dev.pepecoral.radiant.modules.datasets.builders.ImageTestBuilder;
 import dev.pepecoral.radiant.modules.datasets.dtos.DatasetCreationDTO;
+import dev.pepecoral.radiant.modules.datasets.dtos.ImageCreationDTO;
 import dev.pepecoral.radiant.modules.datasets.entities.Dataset;
 import dev.pepecoral.radiant.modules.datasets.entities.Image;
 import dev.pepecoral.radiant.modules.datasets.services.DatasetService;
@@ -103,6 +104,27 @@ public class DatasetControllerTest {
                                 .andExpect(jsonPath("$.name").value(dataset.getName()));
 
                 verify(datasetService).create(any());
+
+        }
+
+        @Test
+        public void datasetController_shouldCreateImage() throws Exception {
+
+                Dataset dataset = DatasetTestBuilder.builder().id(UUID.randomUUID()).build().entity();
+
+                Image image = ImageTestBuilder.builder().build().entity();
+                ImageCreationDTO imageCreationDTO = new ImageCreationDTO(image);
+
+                when(datasetService.findById(any())).thenReturn(dataset);
+                when(imageService.create(any(), any())).thenReturn(image);
+
+                mockMvc.perform(post("/datasets/" + dataset.getId() + "/images")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(imageCreationDTO)))
+                                .andExpect(status().isCreated())
+                                .andExpect(content().contentType(MediaType.APPLICATION_JSON));
+
+                verify(imageService).create(any(), any());
 
         }
 
