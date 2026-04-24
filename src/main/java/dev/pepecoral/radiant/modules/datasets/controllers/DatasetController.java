@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dev.pepecoral.radiant.modules.datasets.dtos.DatasetCreationDTO;
 import dev.pepecoral.radiant.modules.datasets.dtos.DatasetResponseDTO;
+import dev.pepecoral.radiant.modules.datasets.dtos.ImageCreationDTO;
 import dev.pepecoral.radiant.modules.datasets.dtos.ImageResponseDTO;
 import dev.pepecoral.radiant.modules.datasets.entities.Dataset;
 import dev.pepecoral.radiant.modules.datasets.entities.Image;
@@ -54,6 +55,17 @@ public class DatasetController {
         Dataset dataset = datasetService.create(datasetCreationDTO.toDataset());
         DatasetResponseDTO datasetResponseDTO = new DatasetResponseDTO(dataset);
         return new ResponseEntity<>(datasetResponseDTO, HttpStatus.CREATED);
+    }
+
+    @PostMapping("{datasetId}/images")
+    public ResponseEntity<ImageResponseDTO> createImage(@RequestBody ImageCreationDTO imageCreationDTO,
+            @PathVariable UUID datasetId) {
+
+        Dataset dataset = datasetService.findById(datasetId);
+        Image image = imageService.create(imageCreationDTO.toImage(), dataset);
+        ImageResponseDTO imageResponseDTO = new ImageResponseDTO(image);
+        return new ResponseEntity<>(imageResponseDTO, HttpStatus.CREATED);
+
     }
 
 }
