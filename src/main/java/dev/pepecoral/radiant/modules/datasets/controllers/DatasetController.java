@@ -32,6 +32,13 @@ public class DatasetController {
     private final DatasetService datasetService;
     private final ImageService imageService;
 
+    @GetMapping
+    public ResponseEntity<List<DatasetResponseDTO>> getAllDatasets() {
+        List<Dataset> datasets = datasetService.findAll();
+        List<DatasetResponseDTO> datasetResponseDTOs = datasets.stream().map(DatasetResponseDTO::new).toList();
+        return ResponseEntity.ok(datasetResponseDTOs);
+    }
+
     @GetMapping("/{datasetId}")
     public ResponseEntity<DatasetResponseDTO> getDatasetById(@PathVariable UUID datasetId) {
 
