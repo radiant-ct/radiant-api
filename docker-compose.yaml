@@ -26,6 +26,8 @@ services:
     depends_on:
       db:
         condition: service_healthy
+      redis:
+        condition: service_started
     ports:
       - "8080:8080"
     environment:
@@ -35,10 +37,24 @@ services:
     restart: always
     volumes:
       - queue_data:/queue
+  
+  redis:
+    image: redis:7-alpine
+    container_name: radiant-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - backend
+    restart: always
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+
 
 volumes:
   postgres_data:
   queue_data:
+  redis_data:
 
 networks:
   backend:
