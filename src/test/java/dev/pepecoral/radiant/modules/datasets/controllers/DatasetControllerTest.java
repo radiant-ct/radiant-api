@@ -1,14 +1,19 @@
 package dev.pepecoral.radiant.modules.datasets.controllers;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.webmvc.test.autoconfigure.WebMvcTest;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import dev.pepecoral.radiant.modules.common.services.FileService;
+import dev.pepecoral.radiant.modules.common.services.QueueService;
 import dev.pepecoral.radiant.modules.datasets.builders.DatasetTestBuilder;
 import dev.pepecoral.radiant.modules.datasets.builders.ImageTestBuilder;
 import dev.pepecoral.radiant.modules.datasets.dtos.DatasetCreationDTO;
@@ -23,6 +28,8 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.List;
@@ -42,6 +49,17 @@ public class DatasetControllerTest {
 
         @MockitoBean
         ImageService imageService;
+
+        @MockitoBean
+        FileService fileService;
+
+        @MockitoBean
+        QueueService queueService;
+
+        @BeforeEach
+        public void beforeEach() {
+                when(fileService.saveFileToQueue(any(), any())).thenReturn(null);
+        }
 
         @Test
         public void datasetController_shouldReturnDataset_whenAskedById() throws Exception {
@@ -92,18 +110,30 @@ public class DatasetControllerTest {
                 DatasetCreationDTO datasetCreationDTO = new DatasetCreationDTO(dataset.getName(),
                                 dataset.getDescription(), dataset.getCredits());
 
-                when(datasetService.create(any())).thenReturn(dataset);
+                MockMultipartFile file = new MockMultipartFile(
+                                "file",
+                                "test.txt",
+                                MediaType.TEXT_PLAIN_VALUE,
+                                "hello".getBytes());
+
+                MockMultipartFile data = new MockMultipartFile(
+                                "data",
+                                "",
+                                MediaType.APPLICATION_JSON_VALUE,
+                                objectMapper.writeValueAsBytes(datasetCreationDTO));
 
                 when(datasetService.create(any())).thenReturn(dataset);
 
-                mockMvc.perform(post("/datasets")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(datasetCreationDTO)))
-                                .andExpect(status().isCreated())
-                                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                                .andExpect(jsonPath("$.name").value(dataset.getName()));
+                when(datasetService.create(any())).thenReturn(dataset);
 
-                verify(datasetService).create(any());
+                when(queueService.queueDataset(any(), any())).thenReturn(dataset);
+
+                mockMvc.perform(multipart("/datasets")
+                                .file(file)
+                                .file(data))
+                                .andExpect(status().isCreated());
+
+                verify(queueService).queueDataset(any(), any());
 
         }
 
