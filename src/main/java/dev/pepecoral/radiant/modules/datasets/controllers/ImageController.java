@@ -23,11 +23,11 @@ public class ImageController {
     private final ImageService imageService;
 
     @GetMapping("/{imageId}")
-    public ResponseEntity<ImageResponseDTO> getImageById(@PathVariable UUID imageId) {
+    public ImageResponseDTO getImageById(@PathVariable UUID imageId) {
 
         Image image = imageService.findById(imageId);
         ImageResponseDTO imageResponseDTO = new ImageResponseDTO(image);
-        return ResponseEntity.ok(imageResponseDTO);
+        return imageResponseDTO;
     }
 
 }

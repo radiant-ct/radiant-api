@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -38,31 +39,32 @@ public class DatasetController {
     private final ImageService imageService;
 
     @GetMapping
-    public ResponseEntity<List<DatasetResponseDTO>> getAllDatasets() {
+    public List<DatasetResponseDTO> getAllDatasets() {
         List<Dataset> datasets = datasetService.findAll();
         List<DatasetResponseDTO> datasetResponseDTOs = datasets.stream().map(DatasetResponseDTO::new).toList();
-        return ResponseEntity.ok(datasetResponseDTOs);
+        return datasetResponseDTOs;
     }
 
     @GetMapping("/{datasetId}")
-    public ResponseEntity<DatasetResponseDTO> getDatasetById(@PathVariable UUID datasetId) {
+    public DatasetResponseDTO getDatasetById(@PathVariable UUID datasetId) {
 
         Dataset dataset = datasetService.findById(datasetId);
         DatasetResponseDTO datasetResponseDTO = new DatasetResponseDTO(dataset);
-        return ResponseEntity.ok(datasetResponseDTO);
+        return datasetResponseDTO;
     }
 
     @GetMapping("/{datasetId}/images")
-    public ResponseEntity<List<ImageResponseDTO>> getImagesByDatasetId(@PathVariable UUID datasetId) {
+    public List<ImageResponseDTO> getImagesByDatasetId(@PathVariable UUID datasetId) {
 
         Dataset dataset = datasetService.findById(datasetId);
         List<Image> images = imageService.findByDataset(dataset);
         List<ImageResponseDTO> imageDtos = images.stream().map(ImageResponseDTO::new).toList();
-        return ResponseEntity.ok(imageDtos);
+        return imageDtos;
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<DatasetResponseDTO> createDataset(
+    public DatasetResponseDTO createDataset(
             @RequestPart("data") DatasetCreationDTO datasetCreationDTO,
             @RequestPart("file") MultipartFile file) {
 
@@ -72,17 +74,18 @@ public class DatasetController {
 
         Dataset dataset = queueService.queueDataset(datasetCreationDTO.toDataset(), file);
 
-        return new ResponseEntity<>(new DatasetResponseDTO(dataset), HttpStatus.CREATED);
+        return new DatasetResponseDTO(dataset);
     }
 
+    @ResponseStatus(HttpStatus.CREATED)
     @PostMapping("{datasetId}/images")
-    public ResponseEntity<ImageResponseDTO> createImage(@RequestBody ImageCreationDTO imageCreationDTO,
+    public ImageResponseDTO createImage(@RequestBody ImageCreationDTO imageCreationDTO,
             @PathVariable UUID datasetId) {
 
         Dataset dataset = datasetService.findById(datasetId);
         Image image = imageService.create(imageCreationDTO.toImage(), dataset);
         ImageResponseDTO imageResponseDTO = new ImageResponseDTO(image);
-        return new ResponseEntity<>(imageResponseDTO, HttpStatus.CREATED);
+        return imageResponseDTO;
 
     }
 
