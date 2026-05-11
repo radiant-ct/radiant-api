@@ -2,6 +2,7 @@ package dev.pepecoral.radiant.modules.datasets.controllers;
 
 import java.util.UUID;
 
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +23,7 @@ public class ImageController {
 
     private final ImageService imageService;
 
-    @GetMapping("/{imageId}")
+    @GetMapping(value = "/{imageId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ImageResponseDTO getImageById(@PathVariable UUID imageId) {
 
         Image image = imageService.findById(imageId);
