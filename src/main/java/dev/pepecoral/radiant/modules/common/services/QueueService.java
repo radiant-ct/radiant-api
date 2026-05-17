@@ -13,11 +13,13 @@ public class QueueService {
 
     private final FileService fileService;
     private final DatasetService datasetService;
+    private final RedisService redisService;
 
     public Dataset queueDataset(Dataset dataset, MultipartFile file) {
 
         Dataset savedDataset = datasetService.create(dataset);
         fileService.saveFileToQueue(file, savedDataset.getId().toString());
+        redisService.enqueueDatasetTask(savedDataset.getId());
 
         return savedDataset;
     }
