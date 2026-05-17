@@ -1,0 +1,12 @@
+async-timeout==5.0.1
+docopt==0.6.2
+numpy==2.2.6
+pydicom==3.0.2
+pykwalify==1.8.0
+pyradiomics==3.0.1
+python-dateutil==2.9.0.post0
+PyWavelets==1.8.0
+redis==7.4.0
+ruamel.yaml==0.19.1
+simpleitk==2.5.4
+six==1.17.0
