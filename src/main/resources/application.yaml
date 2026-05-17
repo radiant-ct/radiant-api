@@ -1,6 +1,10 @@
 spring:
   profiles:
     active: test
+  servlet:
+    multipart:
+      max-file-size: -1
+      max-request-size: -1
 
 server:
   port: 8080
