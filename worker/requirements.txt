@@ -1,5 +1,8 @@
 async-timeout==5.0.1
+certifi==2026.4.22
+charset-normalizer==3.4.7
 docopt==0.6.2
+idna==3.15
 numpy==2.2.6
 pydicom==3.0.2
 pykwalify==1.8.0
@@ -7,6 +10,8 @@ pyradiomics==3.0.1
 python-dateutil==2.9.0.post0
 PyWavelets==1.8.0
 redis==7.4.0
+requests==2.34.2
 ruamel.yaml==0.19.1
 simpleitk==2.5.4
 six==1.17.0
+urllib3==2.7.0

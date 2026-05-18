@@ -4,6 +4,7 @@ WORKDIR /app
 
 # ---- System dependencies (important for pyradiomics / simpleitk / numpy builds) ----
 RUN apt-get update && apt-get install -y \
+    plastimatch \
     build-essential \
     cmake \
     g++ \
