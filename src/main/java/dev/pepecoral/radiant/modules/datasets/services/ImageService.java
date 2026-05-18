@@ -7,10 +7,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import dev.pepecoral.radiant.modules.common.exceptions.ResourceNotFoundException;
+import dev.pepecoral.radiant.modules.datasets.dtos.ImageFilter;
 import dev.pepecoral.radiant.modules.datasets.entities.Dataset;
 import dev.pepecoral.radiant.modules.datasets.entities.Image;
 import dev.pepecoral.radiant.modules.datasets.exceptions.DatasetSetInImageCreationException;
 import dev.pepecoral.radiant.modules.datasets.repositories.ImageRepository;
+import dev.pepecoral.radiant.modules.datasets.specifications.ImageSpecification;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -44,5 +46,9 @@ public class ImageService {
         Dataset foundDataset = datasetService.findById(dataset.getId());
 
         return imageRepository.findAllByDataset(foundDataset);
+    }
+
+    public List<Image> search(ImageFilter filter) {
+        return imageRepository.findAll(ImageSpecification.from(filter));
     }
 }
