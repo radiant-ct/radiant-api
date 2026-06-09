@@ -1,10 +1,10 @@
 package dev.pepecoral.radiant.modules.datasets.controllers;
 
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -41,6 +41,16 @@ public class ImageController {
                 .stream()
                 .map(ImageResponseDTO::new)
                 .toList();
+    }
+
+    @GetMapping(value = "/ranges", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, Object> getRangeLimits() {
+        return imageService.getRangeLimits();
+    }
+
+    @GetMapping(value = "/distinct-values", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Map<String, List<String>> getDistinctValues() {
+        return imageService.getDistinctValues();
     }
 
 }
